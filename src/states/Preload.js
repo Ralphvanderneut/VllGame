@@ -1,12 +1,21 @@
-var Preloader = function(){
-	
-	module.exports = Preload
+var Preloader = {
 
-	Preload.prototype ={
+		preload:function()
+		{
+			this.displayLoadScreen();
+			this.loadAssets();
+		},
+		
+		displayLoadScreen:function(){
+		
+		},
+		
+		loadAssets:function(){
+		
+		},
 	
 		update:function()
 		{
-		game.state.start('LevelSelect');
+		 game.state.start('LevelSelect');
 		}
-	}
 }

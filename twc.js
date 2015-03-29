@@ -5,10 +5,10 @@ var left = true;
 var main_state = {
 	
 	preload: function(){
-		game.load.image('bg', 'assets/bg.png');
-		game.load.image('player', 'assets/player.png');
-		game.load.image('vuilniszak', 'assets/vuilniszak.png');
-		game.load.image('bank', 'assets/bank.png')
+		game.load.image('bg', 'src/assets/bg.png');
+		game.load.image('player', 'src/assets/player.png');
+		game.load.image('vuilniszak', 'src/assets/vuilniszak.png');
+		game.load.image('bank', 'src/assets/bank.png')
 		
 		if(!left)
 		{
@@ -17,17 +17,19 @@ var main_state = {
 	},
 	
 	create: function(){
+        var enemyFactory = new EnemyFactory;
+        
+        
 		this.bg = game.add.sprite(0,0, 'bg');
 		this.player = game.add.sprite(200,520, 'player');	
 		
 		this.player.anchor.setTo(.5,.5);
 		
-		this.garbage = game.add.group();
-		this.garbage.createMultiple(15,'vuilniszak');
-		
 		this.banks = game.add.group();
 		this.banks.createMultiple(2,'bank');
 		
+        this.garbagebag = enemyFactory.createEnemy('garbage');
+        
 		cursors = game.input.keyboard.createCursorKeys();
 		this.garbageTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 0.75,  this.dropGarbage, this);  		
 		this.bankTimer = this.game.time.events.loop(Phaser.Timer.SECOND * 4,  this.dropBank, this);   
@@ -36,23 +38,15 @@ var main_state = {
 	    this.vlzcounter = 0;
 		var style = { font: "50px Arial", fill: "#000000" };
         this.label_score = this.game.add.text(20, 20, '0' , style);  
-		this.frame_Rate = this.game.add.text(60, 20, game.time.fps.toString() , style);  
+		this.frame_Rate = this.game.add.text(60, 20, game.time.fps.toString() , style);
+		this.UserCommand = new PlayerInput();
 	},
 	
 	update: function()
 	{	
 		if(cursors.right.isDown)
 		{
-			if(this.player.body.x >= 800)
-			{
-				this.player.body.x = 800;
-			}else{
-				this.player.body.x += 10;
-				if(left){
-					this.player.scale.x *= -1;
-					left = false;
-				}
-			}
+			this.UserCommand.execute(new RightCommand(this.player));
 		}
 
 		if(cursors.left.isDown)
@@ -74,21 +68,21 @@ var main_state = {
 	
 	dropGarbage: function()
 	{
-		this.frame_Rate.content = game.time.fps;
-		this.num = Math.floor(this.vlzcounter / 1) + 1;
-		
-		if(this.num > 5)
-		{
-			this.num = 5;
-		}
-			
-		for(var i=0 ; i < this.num;i++){
-			var sack = this.garbage.getFirstDead();		
-			var xas = Math.random() * 760 ;
-			sack.reset(xas, -20);
-			sack.body.gravity.y = 1000;  
-			sack.outOfBoundsKill = true;
-		}
+//		this.frame_Rate.content = game.time.fps;
+//		this.num = Math.floor(this.vlzcounter / 1) + 1;
+//		
+//		if(this.num > 5)
+//		{
+//			this.num = 5;
+//		}
+//			
+//		for(var i=0 ; i < this.num;i++){
+//			var sack = this.garbage.getFirstDead();		
+//			var xas = Math.random() * 760 ;
+//			sack.reset(xas, -20);
+//			sack.body.gravity.y = 1000;  
+//			sack.outOfBoundsKill = true;
+//		}
 	},
 	
 	dropBank: function()

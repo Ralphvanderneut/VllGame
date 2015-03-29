@@ -1,13 +1,6 @@
-var Boot = function(){
+var Boot = {
+	create: function(){
+		game.state.start('Preloader');
 	
-	module.exports = Boot;
-	
-	Boot.prototype = 
-	{
-		
-		create: function(){
-			game.state.start('Preloader');
-		
-		}
 	}
-};
+}
